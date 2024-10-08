@@ -23,16 +23,17 @@ options = GestureRecognizerOptions(
 )
 gesture_recognizer = GestureRecognizer.create_from_options(options)
 
-def open_snake_game():
+#def open_snake_game():
     # Open the Snake game in the default web browser
-    snake_game_url = "https://www.google.com/search?q=snake+game"
-    webbrowser.open(snake_game_url)
+    #snake_game_url = "https://www.google.com/search?q=snake+game"
+   # webbrowser.open(snake_game_url)
     # Wait for the game to load (increase time if necessary)
-    time.sleep(1)
-    pyautogui.click(x=423, y=649)  #
+    #time.sleep(1)
+   # pyautogui.click(x=423, y=649)  #
     
 
     #pyautogui.click(x=707, y=677)  en
+
 def start_game():
     pyautogui.click(x=707, y=677)  #
     
@@ -50,7 +51,21 @@ def canned_game_play(recognized_gesture):
         # Press 'S' for the Thumbs Up gesture
 
          
-    
+def custom_game_play(hand_landmarks):
+    thumb_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
+    thumb_cmc = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_CMC]
+
+    # Calculate the change in x and y between the tip and the base
+    dx = thumb_tip.x - thumb_cmc.x
+ 
+    if dx > 0.05:
+        pyautogui.press("d")  
+
+        print("Right")
+    elif dx < -0.05:
+        pyautogui.press("a")  
+
+        print ("Left")
 
     # Simulate the key press to start the game (use the Enter key)
     
@@ -90,22 +105,22 @@ def main():
                 confidence = result_canned.gestures[0][0].score
                 
                 # if closedd fist open game - can comment this but out and hace it already opened 
-                if recognized_gesture == "Closed_Fist":
-                    open_snake_game()
+                #if recognized_gesture == "Closed_Fist":
+                    #open_snake_game()
                     
-                else:
+                
                     #if unknwon -then call custom game play function 
-                    if(recognized_gesture == "None"):
-                        if result_cus.multi_hand_landmarks:
-                            for hand_landmarks in result_cus.multi_hand_landmarks:
-                                  # Draw landmarks for the hand 
-                                mp_drawing.draw_landmarks(
-                                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                if(recognized_gesture == "None"):
+                    if result_cus.multi_hand_landmarks:
+                        for hand_landmarks in result_cus.multi_hand_landmarks:
+                          # Draw landmarks for the hand 
+                            mp_drawing.draw_landmarks(                                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                                 # here is where we would callde a recognize left/right point custom gestures
-                                print("unknown")
-                    else:
+                            print("unknown")
+                            custom_game_play(hand_landmarks)
+                else:
                         #else its a canned gesture and we can just call canned game play 
-                        canned_game_play(recognized_gesture)
+                    canned_game_play(recognized_gesture)
                     
                 
             
