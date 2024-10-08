@@ -10,6 +10,9 @@ import webbrowser
 import time
 import pyautogui
 
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+
 # Path to the gesture recognition model
 model_path = "gesture_recognizer.task"  # Update this to the correct path where the model is saved
 
@@ -55,52 +58,68 @@ def game_play(recognized_gesture):
 def main():
     # Initialize video capture
     cap = cv2.VideoCapture(0)  # 0 is the default webcam
-
-    while cap.isOpened():
-        success, image = cap.read()
-        if not success:
-            print("Ignoring empty camera frame.")
-            continue
+    with mp_hands.Hands(
+        static_image_mode=False,
+        max_num_hands=2,
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.5
+    ) as hands:
+        
+        while cap.isOpened():
+            success, image = cap.read()
+            if not success:
+                print("Ignoring empty camera frame.")
+                continue
 
         # Flip the image horizontally for a later selfie-view display
         # and convert the BGR image to RGB.
-        image = cv2.flip(image, 1)
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = cv2.flip(image, 1)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        # Convert the image to a Mediapipe Image object for the gesture recognizer
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
+            # Convert the image to a Mediapipe Image object for the gesture recognizer
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
 
-        # Perform gesture recognition on the image
-        result = gesture_recognizer.recognize(mp_image)
-        #if unkown?
+            # Perform gesture recognition on the image
+            result_canned = gesture_recognizer.recognize(mp_image)
+            result_cus = hands.process(image_rgb)
+            #if unkown?
 
-        # Draw the gesture recognition results on the image
-        if result.gestures:
-            recognized_gesture = result.gestures[0][0].category_name
-            confidence = result.gestures[0][0].score
+            # Draw the gesture recognition results on the image
+            if result_canned.gestures:
+                recognized_gesture = result_canned.gestures[0][0].category_name
+                confidence = result_canned.gestures[0][0].score
+                
+                # Example of taking browser action based on recognized gesture
+                if recognized_gesture == "Closed_Fist":
+                    open_snake_game()
+                    
+                else:
+                    #if unknwon -then call sustom game play function 
+                    if(recognized_gesture == "None"):
+                        if result_cus.multi_hand_landmarks:
+                            for hand_landmarks in result_cus.multi_hand_landmarks:
+                        # Draw landmarks
+                                mp_drawing.draw_landmarks(
+                                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                      # Recognize gesture
+                                print("unknown")
+                    else:
+                        game_play(recognized_gesture)
+                    #move the mouse to the rigth coordinate 
+                    
+                    # Make sure to allow for time between recognized gestures so only one window is opened
+                
             
-            # Example of taking browser action based on recognized gesture
-            if recognized_gesture == "Closed_Fist":
-                open_snake_game()
-                
-            else:
-                 #if unknwon -then call sustom game play function 
-                 game_play(recognized_gesture)
-                #move the mouse to the rigth coordinate 
-                
-                # Make sure to allow for time between recognized gestures so only one window is opened
-            
-           
-                
-            # Display recognized gesture and confidence
-            cv2.putText(image, f"Gesture: {recognized_gesture} ({confidence:.2f})", 
-                        (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+                    
+                # Display recognized gesture and confidence
+                cv2.putText(image, f"Gesture: {recognized_gesture} ({confidence:.2f})", 
+                            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        # Display the resulting image
-        cv2.imshow('Gesture Recognition', image)
+            # Display the resulting image
+            cv2.imshow('Gesture Recognition', image)
 
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
+            if cv2.waitKey(5) & 0xFF == 27:
+                break
 
     cap.release()
     cv2.destroyAllWindows()
