@@ -25,16 +25,25 @@ def open_snake_game():
     snake_game_url = "https://www.google.com/search?q=snake+game"
     webbrowser.open(snake_game_url)
     # Wait for the game to load (increase time if necessary)
-    time.sleep(5)
+    time.sleep(1)
     pyautogui.click(x=423, y=649)  # Change coordinates based on your screen
-    time.sleep(2)
-    pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+    
 
+    #pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+def start_game():
+    pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+    
+
+     
 def game_play(recognized_gesture):
+    if recognized_gesture == "Open_Palm":
+        start_game()
     if recognized_gesture == "Thumb_Up":
-                print("Thumbs Up gesture recognized!")
-                pyautogui.press("w")  # Press 'W' for the Thumbs Up gesture
-                time.sleep(0.5) 
+        pyautogui.press("w")  # Press 'W' for the Thumbs Up gesture
+    elif recognized_gesture == "Thumb_Down":
+        pyautogui.press("s")  # Press 'W' for the Thumbs Up gesture
+
+         
     
 
     # Simulate the key press to start the game (use the Enter key)
@@ -67,8 +76,9 @@ def main():
             confidence = result.gestures[0][0].score
             
             # Example of taking browser action based on recognized gesture
-            if recognized_gesture == "Open_Palm":
+            if recognized_gesture == "Closed_Fist":
                 open_snake_game()
+                
             else:
                  game_play(recognized_gesture)
                 #move the mouse to the rigth coordinate 
