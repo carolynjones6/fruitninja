@@ -38,7 +38,7 @@ def start_game():
     
 
      
-def game_play(recognized_gesture):
+def canned_game_play(recognized_gesture):
     if recognized_gesture == "Open_Palm":
         start_game()
     if recognized_gesture == "Thumb_Up":
@@ -89,25 +89,24 @@ def main():
                 recognized_gesture = result_canned.gestures[0][0].category_name
                 confidence = result_canned.gestures[0][0].score
                 
-                # Example of taking browser action based on recognized gesture
+                # if closedd fist open game - can comment this but out and hace it already opened 
                 if recognized_gesture == "Closed_Fist":
                     open_snake_game()
                     
                 else:
-                    #if unknwon -then call sustom game play function 
+                    #if unknwon -then call custom game play function 
                     if(recognized_gesture == "None"):
                         if result_cus.multi_hand_landmarks:
                             for hand_landmarks in result_cus.multi_hand_landmarks:
-                        # Draw landmarks
+                                  # Draw landmarks for the hand 
                                 mp_drawing.draw_landmarks(
                                     image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-                      # Recognize gesture
+                                # here is where we would callde a recognize left/right point custom gestures
                                 print("unknown")
                     else:
-                        game_play(recognized_gesture)
-                    #move the mouse to the rigth coordinate 
+                        #else its a canned gesture and we can just call canned game play 
+                        canned_game_play(recognized_gesture)
                     
-                    # Make sure to allow for time between recognized gestures so only one window is opened
                 
             
                     
