@@ -79,7 +79,7 @@ def main():
 
             # To improve performance, optionally mark the image as not writeable to pass by reference.
             image_rgb.flags.writeable = False
-            results = hands.process(image_rgb)
+            results = hands.process(image_rgb) #always same fo any gesture 
 
             # Draw the hand annotations on the image.
             image_rgb.flags.writeable = True
@@ -92,8 +92,8 @@ def main():
                         image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
                     # Recognize gesture
-                    # gesture = recognize_palm(hand_landmarks)
-                    gesture = recognize_ok(hand_landmarks)
+                    gesture = recognize_palm(hand_landmarks)
+                   #gesture = recognize_ok(hand_landmarks)
                     
                     # Display gesture near hand location
                     cv2.putText(image, gesture, 

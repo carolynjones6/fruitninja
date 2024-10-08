@@ -39,9 +39,12 @@ def game_play(recognized_gesture):
     if recognized_gesture == "Open_Palm":
         start_game()
     if recognized_gesture == "Thumb_Up":
-        pyautogui.press("w")  # Press 'W' for the Thumbs Up gesture
+        pyautogui.press("w")
+        print('up')  # Press 'W' for the Thumbs Up gesture
     elif recognized_gesture == "Thumb_Down":
-        pyautogui.press("s")  # Press 'S' for the Thumbs Up gesture
+        pyautogui.press("s")  
+        print('down')
+        # Press 'S' for the Thumbs Up gesture
 
          
     
@@ -81,6 +84,7 @@ def main():
                 open_snake_game()
                 
             else:
+                 #if unknwon -then call sustom game play function 
                  game_play(recognized_gesture)
                 #move the mouse to the rigth coordinate 
                 
