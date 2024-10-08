@@ -20,6 +20,26 @@ options = GestureRecognizerOptions(
 )
 gesture_recognizer = GestureRecognizer.create_from_options(options)
 
+def open_snake_game():
+    # Open the Snake game in the default web browser
+    snake_game_url = "https://www.google.com/search?q=snake+game"
+    webbrowser.open(snake_game_url)
+    # Wait for the game to load (increase time if necessary)
+    time.sleep(5)
+    pyautogui.click(x=423, y=649)  # Change coordinates based on your screen
+    time.sleep(2)
+    pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+
+def game_play(recognized_gesture):
+    if recognized_gesture == "Thumb_Up":
+                print("Thumbs Up gesture recognized!")
+                pyautogui.press("w")  # Press 'W' for the Thumbs Up gesture
+                time.sleep(0.5) 
+    
+
+    # Simulate the key press to start the game (use the Enter key)
+    
+
 def main():
     # Initialize video capture
     cap = cv2.VideoCapture(0)  # 0 is the default webcam
@@ -48,8 +68,9 @@ def main():
             
             # Example of taking browser action based on recognized gesture
             if recognized_gesture == "Open_Palm":
-                webbrowser.open('https://www.coolmathgames.com/0-snake', new=2)
-                time.sleep(1)
+                open_snake_game()
+            else:
+                 game_play(recognized_gesture)
                 #move the mouse to the rigth coordinate 
                 
                 # Make sure to allow for time between recognized gestures so only one window is opened
