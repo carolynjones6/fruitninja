@@ -26,12 +26,12 @@ def open_snake_game():
     webbrowser.open(snake_game_url)
     # Wait for the game to load (increase time if necessary)
     time.sleep(1)
-    pyautogui.click(x=423, y=649)  # Change coordinates based on your screen
+    pyautogui.click(x=423, y=649)  #
     
 
-    #pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+    #pyautogui.click(x=707, y=677)  en
 def start_game():
-    pyautogui.click(x=707, y=677)  # Change coordinates based on your screen
+    pyautogui.click(x=707, y=677)  #
     
 
      
@@ -41,7 +41,7 @@ def game_play(recognized_gesture):
     if recognized_gesture == "Thumb_Up":
         pyautogui.press("w")  # Press 'W' for the Thumbs Up gesture
     elif recognized_gesture == "Thumb_Down":
-        pyautogui.press("s")  # Press 'W' for the Thumbs Up gesture
+        pyautogui.press("s")  # Press 'S' for the Thumbs Up gesture
 
          
     
@@ -69,6 +69,7 @@ def main():
 
         # Perform gesture recognition on the image
         result = gesture_recognizer.recognize(mp_image)
+        #if unkown?
 
         # Draw the gesture recognition results on the image
         if result.gestures:
