@@ -58,6 +58,7 @@ def custom_game_play(hand_landmarks):
     # Calculate the change in x and y between the tip and the base
     dx = thumb_tip.x - thumb_cmc.x
  
+    
     if dx > 0.05:
         pyautogui.press("d")  
 
