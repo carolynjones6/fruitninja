@@ -35,8 +35,8 @@ gesture_recognizer = GestureRecognizer.create_from_options(options)
     #pyautogui.click(x=707, y=677)  en
 
 def start_game():
-    pyautogui.click(x=707, y=677)  #
-    
+   #pyautogui.click(x=707, y=677)  #
+    pyautogui.press("SPACE")
 
      
 def canned_game_play(recognized_gesture):
