@@ -38,17 +38,18 @@ def start_game():
    #pyautogui.click(x=707, y=677)  #
     pyautogui.press("SPACE")
 
-     
+  
 def canned_game_play(recognized_gesture):
-    if recognized_gesture == "Open_Palm":
-        start_game()
-    if recognized_gesture == "Thumb_Up":
+    if recognized_gesture == "Pointing_Up":
         pyautogui.press("w")
-        print('up')  # Press 'W' for the Thumbs Up gesture
-    elif recognized_gesture == "Thumb_Down":
-        pyautogui.press("s")  
-        print('down')
-        # Press 'S' for the Thumbs Up gesture
+#         start_game()
+#     if recognized_gesture == "Thumb_Up":
+#         pyautogui.press("w")
+#         print('up')  # Press 'W' for the Thumbs Up gesture
+#     elif recognized_gesture == "Thumb_Down":
+#         pyautogui.press("s")  
+#         print('down')
+#         # Press 'S' for the Thumbs Up gesture
 
          
 def custom_game_play(hand_landmarks):
@@ -57,17 +58,32 @@ def custom_game_play(hand_landmarks):
 
     # Calculate the change in x and y between the tip and the base
     dx = thumb_tip.x - thumb_cmc.x
+    dy = thumb_tip.y - thumb_cmc.y
  
+    if abs(dx) > abs(dy):
+        if dx > 0.05:
+            print( "Pointing_Right")
+            pyautogui.press("d")  
+        elif dx < -0.05:
+            pyautogui.press("a")  
+
+            print( "Pointing_Left")
+        
+    else:
+        if dy > 0.05:
+            print( "Pointing_Down")
+            pyautogui.press("s")  
+
+        elif dy < -0.05:
+            pyautogui.press("w") 
+
+            print( "Pointing_Up")
     
-    if dx > 0.05:
-        pyautogui.press("d")  
 
-        print("Right")
-    elif dx < -0.05:
-        pyautogui.press("a")  
+        
+   
 
-        print ("Left")
-
+   
     # Simulate the key press to start the game (use the Enter key)
     
 
