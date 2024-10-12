@@ -23,50 +23,39 @@ options = GestureRecognizerOptions(
 )
 gesture_recognizer = GestureRecognizer.create_from_options(options)
 
-#def open_snake_game():
-    # Open the Snake game in the default web browser
-    #snake_game_url = "https://www.google.com/search?q=snake+game"
-   # webbrowser.open(snake_game_url)
-    # Wait for the game to load (increase time if necessary)
-    #time.sleep(1)
-   # pyautogui.click(x=423, y=649)  #
-    
 
-    #pyautogui.click(x=707, y=677)  en
 
-def start_game():
-   #pyautogui.click(x=707, y=677)  #
-    pyautogui.press("SPACE")
-
-  
+   
 def canned_game_play(recognized_gesture):
+    #chekcing for canned gestures 
+    # this is just a safegaurd because there was already a pointing up, so in case it detects teh ganned pointing up and not our custom, it will still behave correctly
     if recognized_gesture == "Pointing_Up":
         pyautogui.press("w")
-#         start_game()
-#     if recognized_gesture == "Thumb_Up":
-#         pyautogui.press("w")
-#         print('up')  # Press 'W' for the Thumbs Up gesture
-#     elif recognized_gesture == "Thumb_Down":
-#         pyautogui.press("s")  
-#         print('down')
-#         # Press 'S' for the Thumbs Up gesture
+    # starting the game - gesture  is open palm
+    if recognized_gesture == "Open_Palm":
+        pyautogui.press("SPACE")
+    # stopping/pausing the game - gesture is I love you
+    if recognized_gesture == "ILoveYou":
+        pyautogui.press("esc")
+
 
          
 def custom_game_play(hand_landmarks):
+
     thumb_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
     thumb_cmc = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_CMC]
 
-    # Calculate the change in x and y between the tip and the base
+    # Calculate the change in x and y between the thumb tip and base (CMC joint)
     dx = thumb_tip.x - thumb_cmc.x
     dy = thumb_tip.y - thumb_cmc.y
- 
+
+    # Determine if the movement is more horizontal or vertical, point determined by the direction of the relative chnages
     if abs(dx) > abs(dy):
         if dx > 0.05:
             print( "Pointing_Right")
             pyautogui.press("d")  
         elif dx < -0.05:
             pyautogui.press("a")  
-
             print( "Pointing_Left")
         
     else:
@@ -84,7 +73,6 @@ def custom_game_play(hand_landmarks):
    
 
    
-    # Simulate the key press to start the game (use the Enter key)
     
 
 def main():
@@ -121,12 +109,7 @@ def main():
                 recognized_gesture = result_canned.gestures[0][0].category_name
                 confidence = result_canned.gestures[0][0].score
                 
-                # if closedd fist open game - can comment this but out and hace it already opened 
-                #if recognized_gesture == "Closed_Fist":
-                    #open_snake_game()
-                    
-                
-                    #if unknwon -then call custom game play function 
+                # if unknown gesture, prep for checking cutomized gesture 
                 if(recognized_gesture == "None"):
                     if result_cus.multi_hand_landmarks:
                         for hand_landmarks in result_cus.multi_hand_landmarks:
