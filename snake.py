@@ -51,15 +51,15 @@ def custom_game_play(hand_landmarks):
 
     # Determine if the movement is more horizontal or vertical, point determined by the direction of the relative chnages
     if abs(dx) > abs(dy):
-        if dx > 0.05:
-            print( "Pointing_Right")
+        if dx > 0.05:  # Lower the threshold for right movement
+            print("Pointing_Right")
             pyautogui.press("d")  
-        elif dx < -0.05:
+        elif dx < -0.05:  # Lower the threshold for left movement
             pyautogui.press("a")  
-            print( "Pointing_Left")
+            print("Pointing_Left")
         
     else:
-        if dy > 0.05:
+        if dy > 0.1:
             print( "Pointing_Down")
             pyautogui.press("s")  
 
@@ -129,7 +129,7 @@ def main():
                 cv2.putText(image, f"Gesture: {recognized_gesture} ({confidence:.2f})", 
                             (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-            # Display the resulting image
+            # Display the resulting imagewwwwwwwwwwwwwwwww
             cv2.imshow('Gesture Recognition', image)
 
             if cv2.waitKey(5) & 0xFF == 27:
