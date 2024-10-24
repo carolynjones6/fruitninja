@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 
+
 # Import the tasks API for gesture recognition
 from mediapipe.tasks.python.vision import GestureRecognizer, GestureRecognizerOptions
 from mediapipe.tasks.python import BaseOptions
@@ -31,6 +32,7 @@ def canned_game_play(recognized_gesture):
     # this is just a safegaurd because there was already a pointing up, so in case it detects teh ganned pointing up and not our custom, it will still behave correctly
     if recognized_gesture == "Pointing_Up":
         pyautogui.press("w")
+        pyautogui.PAUSE=0.1
     # starting the game - gesture  is open palm
     if recognized_gesture == "Open_Palm":
         pyautogui.press("SPACE")
@@ -41,6 +43,7 @@ def canned_game_play(recognized_gesture):
 
          
 def custom_game_play(hand_landmarks):
+    
 
     thumb_tip = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_TIP]
     thumb_cmc = hand_landmarks.landmark[mp.solutions.hands.HandLandmark.THUMB_CMC]
@@ -52,20 +55,27 @@ def custom_game_play(hand_landmarks):
     # Determine if the movement is more horizontal or vertical, point determined by the direction of the relative chnages
     if abs(dx) > abs(dy):
         if dx > 0.05:  # Lower the threshold for right movement
+            pyautogui.press("d")
+            pyautogui.PAUSE=0.1
+            # time.sleep(0.25)
             print("Pointing_Right")
-            pyautogui.press("d")  
         elif dx < -0.05:  # Lower the threshold for left movement
             pyautogui.press("a")  
+            pyautogui.PAUSE=0.1
+            # time.sleep(0.25)
             print("Pointing_Left")
         
     else:
         if dy > 0.1:
+            pyautogui.press("s")
+            pyautogui.PAUSE=0.1
+            # time.sleep(0.25)
             print( "Pointing_Down")
-            pyautogui.press("s")  
 
         elif dy < -0.05:
             pyautogui.press("w") 
-
+            pyautogui.PAUSE=0.1
+            #time.sleep(0.25)
             print( "Pointing_Up")
     
 
@@ -117,9 +127,11 @@ def main():
                             mp_drawing.draw_landmarks(                                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                                 # here is where we would callde a recognize left/right point custom gestures
                             print("unknown")
+                            
                             custom_game_play(hand_landmarks)
                 else:
                         #else its a canned gesture and we can just call canned game play 
+                    #time.sleep(2)
                     canned_game_play(recognized_gesture)
                     
                 
